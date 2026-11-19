@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block titulo %}Nueva venta{% endblock %}
+{% block contenido %}
+<h1>Nueva venta</h1>
+<p class="subtitulo">La venta queda a nombre de {{ session.usuario.nombre }}. El precio lo toma el servidor.</p>
+
+<form class="formulario" method="post">
+  <div class="campos-en-linea">
+    <label>Cliente
+      <select name="id_cliente" required>
+        <option value="">Seleccione…</option>
+        {% for c in clientes %}
+        <option value="{{ c.id_cliente }}" {{ 'selected' if datos.id_cliente|string == c.id_cliente|string }}>
+          {{ c.nombre }} · {{ c.documento }}
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Método de pago
+      <select name="metodo_pago" required>
+        <option value="">Seleccione…</option>
+        {% for m in metodos %}
+        <option value="{{ m }}" {{ 'selected' if datos.metodo_pago == m }}>{{ m }}</option>
+        {% endfor %}
+      </select>
+    </label>
+  </div>
+
+  <h2>Productos</h2>
+  <p class="subtitulo">Puede dejar filas vacías. Si repite un producto, las cantidades se suman.</p>
+  {% for linea in lineas %}
+  <div class="campos-en-linea">
+    <label>Producto {{ loop.index }}
+      <select name="producto_{{ loop.index }}">
+        <option value="">—</option>
+        {% for p in productos %}
+        <option value="{{ p.id_producto }}" {{ 'selected' if linea.producto|string == p.id_producto|string }}>
+          {{ p.nombre }} · {{ p.precio | pesos }} · stock {{ p.stock }}
+        </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>Cantidad
+      <input name="cantidad_{{ loop.index }}" type="number" min="1" step="1" value="{{ linea.cantidad }}">
+    </label>
+  </div>
+  {% endfor %}
+
+  <button class="boton" type="submit">Registrar venta</button>
+</form>
+{% endblock %}

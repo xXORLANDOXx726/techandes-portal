@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block titulo %}Pedido #{{ pedido.id_pedido }}{% endblock %}
+{% block contenido %}
+<p class="subtitulo"><a href="{{ url_for('pedidos.lista') }}">Volver a pedidos</a></p>
+<div class="encabezado-pagina">
+  <h1>Pedido #{{ pedido.id_pedido }}</h1>
+  <span class="estado {{ pedido.estado }}">{{ pedido.estado }}</span>
+</div>
+
+<div class="ficha">
+  <p><strong>Fecha:</strong> {{ pedido.fecha_pedido | fecha(true) }}</p>
+  <p><strong>Cliente:</strong> {{ pedido.cliente }} · {{ pedido.documento }} · {{ pedido.ciudad }}</p>
+  <p><strong>Vendedor:</strong> {{ pedido.vendedor }}</p>
+  <p><strong>Pago:</strong> {{ pedido.metodo_pago }}</p>
+  <p><strong>Total:</strong> {{ total | pesos }}</p>
+</div>
+
+<div class="tabla-contenedor">
+  <table>
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th class="num">Cantidad</th>
+        <th class="num">Precio</th>
+        <th class="num">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for linea in lineas %}
+      <tr>
+        <td>{{ linea.nombre }}</td>
+        <td class="num">{{ linea.cantidad }}</td>
+        <td class="num">{{ linea.precio_unitario | pesos }}</td>
+        <td class="num">{{ linea.subtotal | pesos }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="vacio">Este pedido no tiene líneas.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if pedido.estado != 'Cancelado' %}
+<form class="filtros" method="post" action="{{ url_for('pedidos.estado', id_pedido=pedido.id_pedido) }}">
+  <label>Nuevo estado
+    <select name="estado" required>
+      {% for e in estados %}
+      <option value="{{ e }}" {{ 'selected' if pedido.estado == e }}>{{ e }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button class="boton" type="submit">Actualizar estado</button>
+</form>
+{% endif %}
+{% endblock %}

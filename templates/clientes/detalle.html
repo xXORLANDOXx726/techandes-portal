@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block titulo %}{{ cliente.nombre }} {{ cliente.apellidos }}{% endblock %}
+{% block contenido %}
+<p class="subtitulo"><a href="{{ url_for('clientes.lista') }}">Volver a clientes</a></p>
+<h1>{{ cliente.nombre }} {{ cliente.apellidos }}</h1>
+
+<div class="ficha">
+  <p><strong>Documento:</strong> {{ cliente.documento }}</p>
+  <p><strong>Correo:</strong> {{ cliente.email }}</p>
+  <p><strong>Teléfono:</strong> {{ cliente.telefono or "—" }}</p>
+  <p><strong>Ciudad:</strong> {{ cliente.ciudad }}</p>
+  <p><strong>Registro:</strong> {{ cliente.fecha_registro | fecha }}</p>
+  <p><strong>Total comprado:</strong> {{ total | pesos }}</p>
+</div>
+
+<h2>Historial de pedidos</h2>
+<div class="tabla-contenedor">
+  <table>
+    <thead>
+      <tr><th>#</th><th>Fecha</th><th class="num">Total</th><th>Estado</th></tr>
+    </thead>
+    <tbody>
+      {% for p in pedidos %}
+      <tr>
+        <td><a href="{{ url_for('pedidos.detalle', id_pedido=p.id_pedido) }}">{{ p.id_pedido }}</a></td>
+        <td>{{ p.fecha_pedido | fecha(true) }}</td>
+        <td class="num">{{ p.total | pesos }}</td>
+        <td><span class="estado {{ p.estado }}">{{ p.estado }}</span></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="vacio">Este cliente todavía no tiene pedidos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
