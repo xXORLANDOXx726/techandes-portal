@@ -34,7 +34,7 @@ Los archivos SQL se encuentran organizados de la siguiente manera:
 
 1. `Base de datos_ clase (1).sql`: contiene la creación de la base de datos y la estructura de las tablas principales: categorías, clientes, empleados, productos, pedidos y detalle de pedidos.
 2. `sql/01_usuarios.sql`: crea la tabla de usuarios, configura los roles de acceso y registra las cuentas de prueba.
-3. `sql/02_usuarios.sql`: crea el usuario de conexión `techandes_api` y le asigna permisos para consultar, insertar, actualizar y eliminar registros en la base de datos.
+3. `sql/02_permisos.sql`: crea el usuario de conexión `techandes_api` y le asigna permisos para consultar, insertar, actualizar y eliminar registros en la base de datos.
 
 **Orden de ejecución:** primero se debe ejecutar el archivo original de la base de datos, después el archivo de usuarios y finalmente el archivo de permisos.
 
